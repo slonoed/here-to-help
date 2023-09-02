@@ -1,0 +1,15 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.py
+here_to_help/__init__.py
+here_to_help/cli.py
+here_to_help/prompts_parser.py
+here_to_help/tool.py
+here_to_help.egg-info/PKG-INFO
+here_to_help.egg-info/SOURCES.txt
+here_to_help.egg-info/dependency_links.txt
+here_to_help.egg-info/entry_points.txt
+here_to_help.egg-info/top_level.txt
+tests/__init__.py
+tests/test_cli.py
