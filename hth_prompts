@@ -1,0 +1,40 @@
+=== Joke ===
+{{#user~}}
+Tell a joke about {{topic}}
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'output'}}
+{{~/assistant}}
+
+=== Synonyms ===
+{{#user~}}
+Find 10 synonyms to word "{{word}}"
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'output'}}
+{{~/assistant}}
+
+=== Double story ===
+{{#system~}}
+You are poet. You tell short but deep stories. Each story is one sentense.
+{{~/system}}
+
+{{#user~}}
+Tell short funny story about {{topic}}
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'sad'}}
+{{out sad}}
+{{~/assistant}}
+
+{{#user~}}
+Now tell a funny story about it
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'funny'}}
+{{out funny}}
+{{~/assistant}}

@@ -38,15 +38,13 @@ def main():
                 program = guidance(prompt['content'], llm=gpt4) # THIS SHOULD PASTE PROPER CONTENT
                 out = ""
                 def r(s):
-                    global out
-                    out = out + s
+                    nonlocal out
+                    out = out + "\n\n" + s
 
                 name_values['out'] = r
 
                 program_args = {key: value for key, value in name_values.items()}
                 result = program(**program_args)
-
-                print("")
 
                 if out != "":
                     print(out)
