@@ -22,7 +22,7 @@ def parse_text(input_text):
         parsed_dict['content'] = content
 
         # Find all unique placeholders like {{name}} in the content
-        parsed_dict['inputs'] = re.findall(r"{{(.*?)}}", content)
+        parsed_dict['inputs'] = re.findall(r'{{([\w\d_]+)}}', content)
 
         # Append the dictionary to the parsed_list
         parsed_list.append(parsed_dict)

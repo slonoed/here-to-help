@@ -1,7 +1,10 @@
 import argparse
+import guidance
 import os
 from iterfzf import iterfzf
 from here_to_help.prompts_parser import parse_text
+
+gpt4 = guidance.llms.OpenAI("gpt-4")
 
 def main():
     parser = argparse.ArgumentParser(description='Here To Help CLI tool.')
@@ -28,9 +31,30 @@ def main():
 
         for prompt in parsed_prompts:
             if prompt['title'] == selected_title:
-                print(f"Selected Title: {prompt['title']}")
-                print(f"Content: {prompt['content']}")
-                print(f"Inputs: {prompt['inputs']}")
+                name_values = {}
+                for name in prompt['inputs']:
+                    user_value = input(f"Please enter a value for {name}: ")
+                    name_values[name] = user_value
+                program = guidance(prompt['content'], llm=gpt4) # THIS SHOULD PASTE PROPER CONTENT
+                out = ""
+                def r(s):
+                    global out
+                    out = out + s
+
+                name_values['out'] = r
+
+                program_args = {key: value for key, value in name_values.items()}
+                result = program(**program_args)
+
+                print("")
+
+                if out != "":
+                    print(out)
+                elif result.variables().get('output') != None:
+                    print(result.variables()['output'])
+                else:
+                    print(result)
+
                 break
 
 if __name__ == '__main__':
