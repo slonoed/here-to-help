@@ -21,6 +21,7 @@ def main():
         for item in parsed_data:
             print(f"Title: {item['title']}")
             print(f"Content: {item['content']}")
+            print(f"Inputs: {item['inputs']}")
             print('-' * 20)
 
 if __name__ == '__main__':
