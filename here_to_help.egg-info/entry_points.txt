@@ -1,2 +1,0 @@
-[console_scripts]
-hth = here_to_help.cli:main

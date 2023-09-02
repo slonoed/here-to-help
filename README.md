@@ -3,7 +3,17 @@ A CLI tool `hth` for assistance.
 
 ## Install
 
-Ensure you have `fzf` installed in system.
+### MacOS
+```
+brew tap slonoed/homebrew-tap
+brew install hth
+```
+
+### Other systems
+
+Use sources. You would need
+1. Python >3.9
+2. `fzf`
 
 ## Models
 
