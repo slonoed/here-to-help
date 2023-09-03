@@ -30,29 +30,8 @@ OPENAI_API_KEY=mykey hth -p prompts_file
 
 You can specify prompts file with `-p` argument. By default it uses `~/hth_prompts`.
 
-Add promptrs in following format
+Check example prompts in `./hth_prompts` file.
 
-```
-=== Joke ===
-{{#user~}}
-Tell a joke about {{topic}}
-{{~/user}}
-
-{{#assistant~}}
-{{gen 'output'}}
-{{~/assistant}}
-
-=== Synonyms ===
-{{#user~}}
-Find 10 synonyms to word "{{word}}"
-{{~/user}}
-
-{{#assistant~}}
-{{gen 'output'}}
-{{~/assistant}}
-```
-
-Each prompts separated by two `===` and title betwee.
 It's important to have `{{gen 'output'}}`. Name `output` is important.
 It will be printed to stdout.
 
