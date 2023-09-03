@@ -18,7 +18,7 @@ def parse_text(input_text: str) -> List[Dict[str, str]]:
             key, value = line.split(':')
             metadata[key.strip()] = value.strip()
 
-        inputs = re.findall(r'{{(.*?)}}', content)
+        inputs = re.findall(r'{{([\w\d_]+)}}', content)
         
         metadata['content'] = content
         metadata['inputs'] = inputs

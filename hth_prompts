@@ -1,4 +1,5 @@
-=== Joke ===
+title: Joke
+---
 {{#user~}}
 Tell a joke about {{topic}}
 {{~/user}}
@@ -6,8 +7,10 @@ Tell a joke about {{topic}}
 {{#assistant~}}
 {{gen 'output'}}
 {{~/assistant}}
+===
 
-=== Synonyms ===
+title: Synonyms
+---
 {{#user~}}
 Find 10 synonyms to word "{{word}}"
 {{~/user}}
@@ -15,12 +18,11 @@ Find 10 synonyms to word "{{word}}"
 {{#assistant~}}
 {{gen 'output'}}
 {{~/assistant}}
+===
 
-=== Double story ===
-{{#system~}}
-You are poet. You tell short but deep stories. Each story is one sentense.
-{{~/system}}
-
+title: Double story
+system: You are poet. You tell short but deep stories. Each story is one sentence.
+---
 {{#user~}}
 Tell short funny story about {{topic}}
 {{~/user}}
