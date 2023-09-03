@@ -22,38 +22,41 @@ def main():
 
     with open(args.prompts_file, 'r') as f:
         content = f.read()
-        parsed_prompts = parse_text(content)
-        titles = [prompt['title'] for prompt in parsed_prompts]
-        selected_title = iterfzf(titles)
 
-        if not selected_title:
-            exit(f"No prompt selected")
+    parsed_prompts = parse_text(content)
+    titles = [prompt['title'] for prompt in parsed_prompts]
+    selected_title = iterfzf(titles)
 
-        for prompt in parsed_prompts:
-            if prompt['title'] == selected_title:
-                name_values = {}
-                for name in prompt['inputs']:
-                    user_value = input(f"Please enter a value for {name}: ")
-                    name_values[name] = user_value
-                program = guidance(prompt['content'], llm=gpt4) # THIS SHOULD PASTE PROPER CONTENT
-                out = ""
-                def r(s):
-                    nonlocal out
-                    out = out + "\n\n" + s
+    if not selected_title:
+        exit(f"No prompt selected")
 
-                name_values['out'] = r
+    prompt = next((p for p in parsed_prompts if p['title'] == selected_title), None)
+    if prompt is None:
+        exit("Selected prompt not found.")
 
-                program_args = {key: value for key, value in name_values.items()}
-                result = program(**program_args)
+    name_values = {name: input(f"Please enter a value for {name}: ") for name in prompt['inputs']}
 
-                if out != "":
-                    print(out)
-                elif result.variables().get('output') != None:
-                    print(result.variables()['output'])
-                else:
-                    print(result)
+    program = guidance(prompt['content'], llm=gpt4) # THIS SHOULD PASTE PROPER CONTENT
 
-                break
+    out = ""
+    def r(s):
+        nonlocal out
+        out = out + "\n\n" + s
+
+    name_values['out'] = r
+
+    program_args = {key: value for key, value in name_values.items()}
+    result = program(**program_args)
+
+    if out:
+        print(out)
+        return
+
+    if result.variables().get('output') is not None:
+        print(result.variables()['output'])
+        return
+
+    print(result)
 
 if __name__ == '__main__':
     main()
