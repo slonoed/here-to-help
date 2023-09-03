@@ -28,41 +28,41 @@ def main():
     if not os.path.exists(args.prompts_file):
         exit(f"Prompts file not found: {args.prompts_file}")
 
-    with open(args.prompts_file, 'r') as f:
-        content = f.read()
-        parsed_prompts = parse_text(content)
-        titles = [prompt['title'] for prompt in parsed_prompts]
-        selected_title = iterfzf(titles)
+    f = open(args.prompts_file, 'r')
+    content = f.read()
+    f.close()  # Don't forget this line!
 
-        if not selected_title:
-            exit(f"No prompt selected")
+    parsed_prompts = parse_text(content)
+    titles = [prompt['title'] for prompt in parsed_prompts]
+    selected_title = iterfzf(titles)
 
-        for prompt in parsed_prompts:
-            if prompt['title'] == selected_title:
-                name_values = {}
-                for name in prompt['inputs']:
-                    user_value = input(f"Please enter a value for {name}: ")
-                    name_values[name] = user_value
-                llm = get_model(prompt.get('model', default_model))
-                program = guidance(prompt['content'], llm=llm)
-                out = ""
-                def r(s):
-                    nonlocal out
-                    out = out + "\n\n" + s
+    if not selected_title:
+        exit(f"No prompt selected")
 
-                name_values['out'] = r
+    prompt = next((prompt for prompt in parsed_prompts if prompt['title'] == selected_title), None)
 
-                program_args = {key: value for key, value in name_values.items()}
-                result = program(**program_args)
+    name_values = {}
+    for name in prompt['inputs']:
+        user_value = input(f"Please enter a value for {name}: ")
+        name_values[name] = user_value
+    llm = get_model(prompt.get('model', default_model))
+    program = guidance(prompt['content'], llm=llm)
+    out = ""
+    def r(s):
+        nonlocal out
+        out = out + "\n\n" + s
 
-                if out != "":
-                    print(out)
-                elif result.variables().get('output') != None:
-                    print(result.variables()['output'])
-                else:
-                    print(result)
+    name_values['out'] = r
 
-                break
+    program_args = {key: value for key, value in name_values.items()}
+    result = program(**program_args)
+
+    if out != "":
+        print(out)
+    elif result.variables().get('output') != None:
+        print(result.variables()['output'])
+    else:
+        print(result)
 
 if __name__ == '__main__':
     main()
