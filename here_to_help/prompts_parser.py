@@ -1,30 +1,28 @@
 import re
+from typing import List, Dict
 
-def parse_text(input_text):
-    """
-    Parse the given text and return a list of dictionaries containing 'title', 'content', and 'inputs'.
+def parse_text(input_text: str) -> List[Dict[str, str]]:
+    sections = input_text.strip().split('===')
+    parsed_sections = []
 
-    Args:
-        input_text (str): The text to be parsed.
+    for section in sections:
+        if not section.strip():
+            continue
 
-    Returns:
-        list[dict]: A list of dictionaries where each dictionary has keys 'title', 'content', and 'inputs'.
-    """
-    parsed_list = []
+        metadata_content = section.split('---')
+        metadata_text = metadata_content[0].strip()
+        content = metadata_content[1].strip() if len(metadata_content) > 1 else ""
 
-    # Use regex to find sections defined by '=== Title ==='
-    for match in re.finditer(r"===\s*(.*?)\s*===\s*([\s\S]*?)(?=(===|$))", input_text):
-        title, content = match.group(1).strip(), match.group(2).strip()
+        metadata = {}
+        for line in metadata_text.split('\n'):
+            key, value = line.split(':')
+            metadata[key.strip()] = value.strip()
 
-        # Initialize a dictionary for the current section
-        parsed_dict = {}
-        parsed_dict['title'] = title
-        parsed_dict['content'] = content
+        inputs = re.findall(r'{{(.*?)}}', content)
+        
+        metadata['content'] = content
+        metadata['inputs'] = inputs
 
-        # Find all unique placeholders like {{name}} in the content
-        parsed_dict['inputs'] = re.findall(r'{{([\w\d_]+)}}', content)
+        parsed_sections.append(metadata)
 
-        # Append the dictionary to the parsed_list
-        parsed_list.append(parsed_dict)
-
-    return parsed_list
+    return parsed_sections
