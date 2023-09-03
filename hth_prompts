@@ -33,8 +33,11 @@ Find 10 synonyms to word "{{word}}"
 ===
 
 title: Double story
-system: You are poet. You tell short but deep stories. Each story is one sentence.
 ---
+{{#system~}}
+You are poet. You tell short but deep stories. Each story is one sentence.
+{{~/system}}
+
 {{#user~}}
 Tell short funny story about {{topic}}
 {{~/user}}
@@ -52,3 +55,4 @@ Now tell a funny story about it
 {{gen 'funny'}}
 {{out funny}}
 {{~/assistant}}
+===
