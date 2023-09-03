@@ -9,6 +9,18 @@ Tell a joke about {{topic}}
 {{~/assistant}}
 ===
 
+title: GPT3 Joke
+model: gpt-3.5-turbo
+---
+{{#user~}}
+Tell a joke about {{topic}}
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'output'}}
+{{~/assistant}}
+===
+
 title: Synonyms
 ---
 {{#user~}}
