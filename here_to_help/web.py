@@ -48,4 +48,5 @@ class WebServer:
             html = markdown.markdown(result)
             return HTMLResponse(html)
 
-        return self.templates.TemplateResponse("prompt.html", {"request": request, "prompt": prompt})
+        query_params_dict = dict(request.query_params)
+        return self.templates.TemplateResponse("prompt.html", {"request": request, "prompt": prompt, "query_params": query_params_dict})
