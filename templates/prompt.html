@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{prompt.title}}
+<br />
+
+<form hx-post="{{ url_for('prompt', title=prompt.title) }}" hx-target="#response">
+  {% for input in prompt.inputs %}
+  <div class="form-group">
+    <label for="{{ input }}">{{ input }}</label>
+    <input type="text" class="form-control" id="{{ input }}" name="{{ input }}">
+  </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+  <div id="response"></div>
+
+</form>
+
+{% endblock %}

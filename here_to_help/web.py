@@ -20,6 +20,7 @@ class WebServer:
         self.app = Starlette(debug=True, routes=[
             Mount('/static', app=StaticFiles(directory=static_directory), name="static"),
             Route("/result", self.result, name="result"),
+            Route("/prompt/{title}", self.prompt, name="prompt", methods=["GET", "POST"]),
             Route('/', self.homepage),
         ], middleware=[
             Middleware(HtmxMiddleware),
@@ -30,3 +31,15 @@ class WebServer:
 
     async def result(self, request: Request) -> Response:
         return PlainTextResponse("Hello, world!")
+
+    async def prompt(self, request: Request) -> Response:
+        title = request.path_params['title']
+        prompt = next((item for item in self.prompts if item['title'] == title), None)
+        if not prompt:
+            return PlainTextResponse("Prompt not found", status_code=404)
+
+        if request.method == 'POST':
+            form_data = await request.form()
+            return PlainTextResponse('<p>Some response based on form data</p>')
+
+        return self.templates.TemplateResponse("prompt.html", {"request": request, "prompt": prompt})
