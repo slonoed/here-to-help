@@ -3,6 +3,7 @@ import guidance
 import os
 from iterfzf import iterfzf
 from here_to_help.prompts_parser import parse_text
+from here_to_help.web import WebServer
 import uvicorn
 
 
@@ -16,8 +17,9 @@ def get_model(name):
             return guidance.llms.OpenAI("gpt-4")
     exit(f"Model not found: {name}")
 
-def run_server():
-    uvicorn.run("here_to_help.web:app", host="0.0.0.0", port=8000, reload=True)
+def run_server(parsed_prompts):
+    server = WebServer(parsed_prompts)
+    uvicorn.run(server.app, host="0.0.0.0", port=8000, reload=False)
 
 def main():
     parser = argparse.ArgumentParser(description='Here To Help CLI tool.')
@@ -31,9 +33,6 @@ def main():
     
     args = parser.parse_args()
 
-    if args.web:
-        run_server()
-        return
 
 
     if not os.path.exists(args.prompts_file):
@@ -44,6 +43,11 @@ def main():
     f.close()  # Don't forget this line!
 
     parsed_prompts = parse_text(content)
+
+    if args.web:
+        run_server(parsed_prompts)
+        return
+
     titles = [prompt['title'] for prompt in parsed_prompts]
     selected_title = iterfzf(titles)
 

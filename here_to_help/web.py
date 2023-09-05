@@ -1,34 +1,31 @@
 import os
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse
-from starlette.responses import PlainTextResponse
-from starlette.responses import Response
-from starlette.routing import Route
+from starlette.responses import JSONResponse, PlainTextResponse, Response
+from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
-from starlette.routing import Mount
-from asgi_htmx import HtmxMiddleware
 from starlette.middleware import Middleware
 from starlette.templating import Jinja2Templates
-from asgi_htmx import HtmxMiddleware
-from asgi_htmx import HtmxRequest as Request
+from asgi_htmx import HtmxMiddleware, HtmxRequest as Request
 
 
-current_directory = os.path.dirname(os.path.abspath(__file__))
-static_directory = os.path.join(current_directory, '..', 'static')
-templates_directory = os.path.join(current_directory, '..', 'templates')
+class WebServer:
+    def __init__(self, parsed_prompts):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        static_directory = os.path.join(current_directory, '..', 'static')
+        templates_directory = os.path.join(current_directory, '..', 'templates')
 
-templates = Jinja2Templates(directory=templates_directory)
+        self.templates = Jinja2Templates(directory=templates_directory)
 
-async def homepage(request):
-    return templates.TemplateResponse("index.html", {"request": request})
+        self.app = Starlette(debug=True, routes=[
+            Mount('/static', app=StaticFiles(directory=static_directory), name="static"),
+            Route("/result", self.result, name="result"),
+            Route('/', self.homepage),
+        ], middleware=[
+            Middleware(HtmxMiddleware),
+        ])
 
-async def result(request: Request) -> Response:
-    return PlainTextResponse("Hello, world!")
+    async def homepage(self, request):
+        return self.templates.TemplateResponse("index.html", {"request": request})
 
-app = Starlette(debug=True, routes=[
-    Mount('/static', app=StaticFiles(directory=static_directory), name="static"),
-    Route("/result", result, name="result"),
-    Route('/', homepage),
-], middleware=[
-    Middleware(HtmxMiddleware),
-])
+    async def result(self, request: Request) -> Response:
+        return PlainTextResponse("Hello, world!")
