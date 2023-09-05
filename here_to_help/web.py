@@ -6,6 +6,7 @@ from starlette.staticfiles import StaticFiles
 from starlette.middleware import Middleware
 from starlette.templating import Jinja2Templates
 from asgi_htmx import HtmxMiddleware, HtmxRequest as Request
+from here_to_help.processor import run
 
 
 class WebServer:
@@ -40,6 +41,8 @@ class WebServer:
 
         if request.method == 'POST':
             form_data = await request.form()
-            return PlainTextResponse('<p>Some response based on form data</p>')
+            form_data_dict = dict(form_data.items())
+            result = run(prompt, form_data_dict)
+            return PlainTextResponse(result)
 
         return self.templates.TemplateResponse("prompt.html", {"request": request, "prompt": prompt})

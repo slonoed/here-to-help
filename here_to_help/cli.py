@@ -4,8 +4,8 @@ import os
 from iterfzf import iterfzf
 from here_to_help.prompts_parser import parse_text
 from here_to_help.web import WebServer
+from here_to_help.processor import run
 import uvicorn
-
 
 default_model = 'gpt-4'
 
@@ -58,24 +58,9 @@ def main():
     for name in prompt['inputs']:
         user_value = input(f"Please enter a value for {name}: ")
         name_values[name] = user_value
-    llm = get_model(prompt.get('model', default_model))
-    program = guidance(prompt['content'], llm=llm)
-    out = ""
-    def r(s):
-        nonlocal out
-        out = out + "\n\n" + s
-
-    name_values['out'] = r
-
-    program_args = {key: value for key, value in name_values.items()}
-    result = program(**program_args)
-
-    if out != "":
-        print(out)
-    elif result.variables().get('output') != None:
-        print(result.variables()['output'])
-    else:
-        print(result)
+    
+    r = run(prompt, name_values)
+    print(r)
 
 if __name__ == '__main__':
     main()
