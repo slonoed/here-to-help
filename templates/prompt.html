@@ -4,7 +4,7 @@
 {{prompt.title}}
 <br />
 
-<form hx-post="{{ url_for('prompt', title=prompt.title) }}" hx-target="#response">
+<form hx-post="{{ url_for('prompt', title=prompt.title) }}" hx-target="#response" hx-indicator="#loading">
   {% for input in prompt.inputs %}
   <div class="form-group">
     <label for="{{ input }}">{{ input }}</label>
@@ -12,6 +12,10 @@
   </div>
   {% endfor %}
   <button type="submit" class="btn btn-primary">Submit</button>
+
+  <div id="loading" class="htmx-indicator">
+    Loading...
+  </div>
 
   <div id="response"></div>
 

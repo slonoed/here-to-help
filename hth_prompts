@@ -56,3 +56,18 @@ Now tell a funny story about it
 {{out funny}}
 {{~/assistant}}
 ===
+
+title: Markdown
+---
+{{#system~}}
+You are markdown wiki writer. You will write small wiki pages using markdown.
+Page should not be more than 15 lines.
+{{~/system}}
+
+{{#user~}}
+Write a markdown wiki page about {{topic}}
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'output'}}
+{{~/assistant}}

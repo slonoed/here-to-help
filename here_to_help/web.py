@@ -1,12 +1,14 @@
 import os
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse, PlainTextResponse, Response
+from starlette.responses import JSONResponse, PlainTextResponse, Response, HTMLResponse
 from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
 from starlette.middleware import Middleware
 from starlette.templating import Jinja2Templates
 from asgi_htmx import HtmxMiddleware, HtmxRequest as Request
 from here_to_help.processor import run
+import markdown
+
 
 
 class WebServer:
@@ -43,6 +45,7 @@ class WebServer:
             form_data = await request.form()
             form_data_dict = dict(form_data.items())
             result = run(prompt, form_data_dict)
-            return PlainTextResponse(result)
+            html = markdown.markdown(result)
+            return HTMLResponse(html)
 
         return self.templates.TemplateResponse("prompt.html", {"request": request, "prompt": prompt})
