@@ -15,6 +15,7 @@ class WebServer:
         templates_directory = os.path.join(current_directory, '..', 'templates')
 
         self.templates = Jinja2Templates(directory=templates_directory)
+        self.prompts = parsed_prompts
 
         self.app = Starlette(debug=True, routes=[
             Mount('/static', app=StaticFiles(directory=static_directory), name="static"),
@@ -25,7 +26,7 @@ class WebServer:
         ])
 
     async def homepage(self, request):
-        return self.templates.TemplateResponse("index.html", {"request": request})
+        return self.templates.TemplateResponse("index.html", {"request": request, "prompts": self.prompts})
 
     async def result(self, request: Request) -> Response:
         return PlainTextResponse("Hello, world!")
