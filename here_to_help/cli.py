@@ -33,14 +33,12 @@ def main():
     
     args = parser.parse_args()
 
-
-
     if not os.path.exists(args.prompts_file):
         exit(f"Prompts file not found: {args.prompts_file}")
 
     f = open(args.prompts_file, 'r')
     content = f.read()
-    f.close()  # Don't forget this line!
+    f.close()
 
     parsed_prompts = parse_text(content)
 

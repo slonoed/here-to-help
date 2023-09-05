@@ -72,3 +72,10 @@ Install deps
 ```
 pip install -r requirements.txt
 ```
+
+### Developing web version
+
+Start dev server
+```
+uvicorn here_to_help.web_dev:server --host 0.0.0.0 --port 8000 --reload
+```
