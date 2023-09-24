@@ -32,7 +32,10 @@ def main():
     parser.add_argument('--web', action='store_true', help='Run web server')
     parser.add_argument('--filter',
                         type=str,
-                        help=f'Filter prompts by title', default=None)
+                        help='Filter prompts by title', default=None)
+    parser.add_argument('-i', '--interactive',
+                        action='store_true',
+                        help='Run any prompt in interactive mode', default=False)
 
     args = parser.parse_args()
 
@@ -67,7 +70,7 @@ def main():
         user_value = input(f"Please enter a value for {name}: ")
         name_values[name] = user_value
 
-    r = run(prompt, name_values)
+    r = run(prompt, name_values, args.interactive)
     print(r)
 
 if __name__ == '__main__':

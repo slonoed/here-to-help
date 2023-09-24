@@ -2,6 +2,17 @@ import guidance
 
 default_model = 'gpt-4'
 
+interactive_suffix = """
+{{~#geneach 'chat' stop=False}}
+{{#user~}}
+{{set 'this.input' (await 'input') hidden=False}}
+{{~/user}}
+{{#assistant~}}
+{{gen 'this.output' temperature=0 max_tokens=300}}
+{{~/assistant}}
+{{~/geneach}}
+"""
+
 def get_model(name):
     match name:
         case "gpt-3.5-turbo":
@@ -10,9 +21,13 @@ def get_model(name):
             return guidance.llms.OpenAI("gpt-4")
     exit(f"Model not found: {name}")
 
-def run(prompt, name_values):
+def run(prompt, name_values, force_interactive=False):
+    content = prompt['content']
+    if not prompt.get('_interactive', False) and force_interactive:
+        content = content + "\n" + interactive_suffix
+
     llm = get_model(prompt.get('model', default_model))
-    program = guidance(prompt['content'], llm=llm)
+    program = guidance(content, llm=llm)
     out = ""
     def r(s):
         nonlocal out
@@ -24,7 +39,12 @@ def run(prompt, name_values):
     program = program(**program_args)
 
     # Run infinite loop when interactive mode is enabled
-    if prompt.get('_interactive', False):
+    if prompt.get('_interactive', False) or force_interactive:
+        if out != "":
+            print(out)
+        elif program.variables().get('output') != None:
+            print(program.variables()['output'])
+
         while True:
             i = input(f"> ")
             program = program(input=i)

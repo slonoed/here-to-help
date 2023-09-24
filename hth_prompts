@@ -87,3 +87,20 @@ Write a markdown wiki page about {{topic}}
 {{#assistant~}}
 {{gen 'output'}}
 {{~/assistant}}
+===
+
+title: dev
+model: gpt-3.5-turbo
+---
+{{#system~}}
+You help answering questions in a shortest way possible.
+{{~/system}}
+
+{{#user~}}
+Whos was Rome emperor in 0 AD?
+{{~/user}}
+
+{{#assistant~}}
+{{gen 'output'}}
+{{~/assistant}}
+===

@@ -90,6 +90,8 @@ You are a helpful assistant. When you answer questions you always start with wor
 ===
 ```
 
+You can also force any prompt to run in interactive mode with `-i` flag.
+
 ## Development
 
 Install deps
