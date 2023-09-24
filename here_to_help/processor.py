@@ -21,7 +21,14 @@ def run(prompt, name_values):
     name_values['out'] = r
 
     program_args = {key: value for key, value in name_values.items()}
-    result = program(**program_args)
+    program = program(**program_args)
+
+    # Run infinite loop when interactive mode is enabled
+    if prompt.get('_interactive', False):
+        while True:
+            i = input(f"> ")
+            program = program(input=i)
+            print(program['chat'][-2].get('output', '<NONE>'))
 
     if out != "":
         return out

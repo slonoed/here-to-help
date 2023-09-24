@@ -30,7 +30,10 @@ def main():
                         help=f'Path to the prompts file (default: {default_prompts_file_path})',
                         default=default_prompts_file_path)
     parser.add_argument('--web', action='store_true', help='Run web server')
-    
+    parser.add_argument('--filter',
+                        type=str,
+                        help=f'Filter prompts by title', default=None)
+
     args = parser.parse_args()
 
     if not os.path.exists(args.prompts_file):
@@ -47,18 +50,23 @@ def main():
         return
 
     titles = [prompt['title'] for prompt in parsed_prompts]
-    selected_title = iterfzf(titles)
+    prompt = None
 
-    if not selected_title:
-        exit(f"No prompt selected")
-
-    prompt = next((prompt for prompt in parsed_prompts if prompt['title'] == selected_title), None)
+    if args.filter:
+        prompt = next((prompt for prompt in parsed_prompts if prompt['title'] == args.filter), None)
+        if not prompt:
+            exit("cant find prompt by filter")
+    else:
+        selected_title = iterfzf(titles)
+        if not selected_title:
+            exit(f"No prompt selected")
+        prompt = next((prompt for prompt in parsed_prompts if prompt['title'] == selected_title), None)
 
     name_values = {}
     for name in prompt['inputs']:
         user_value = input(f"Please enter a value for {name}: ")
         name_values[name] = user_value
-    
+
     r = run(prompt, name_values)
     print(r)
 

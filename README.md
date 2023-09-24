@@ -66,6 +66,30 @@ Now tell a funny story about it
 In this example final stdout will contain both generations. One for `sad`
 and one for `funny`.
 
+### Chat mode
+
+Chat mode work similar to ChatGPT. To enable it you should have `{{~#geneach 'chat' stop=False}}` in
+prompt. Inside you need `input`, `this.input`, `output`, `this.output`. 
+Easies way to create such prompt is to copy from here or "hth_prompts" file.
+
+```
+title: Chat
+model: gpt-3.5-turbo
+---
+{{#system~}}
+You are a helpful assistant. When you answer questions you always start with work "Cool"
+{{~/system}}
+{{~#geneach 'chat' stop=False}}
+{{#user~}}
+{{set 'this.input' (await 'input') hidden=False}}
+{{~/user}}
+{{#assistant~}}
+{{gen 'this.output' temperature=0 max_tokens=300}}
+{{~/assistant}}
+{{~/geneach}}
+===
+```
+
 ## Development
 
 Install deps

@@ -22,6 +22,7 @@ def parse_text(input_text: str) -> List[Dict[str, str]]:
         
         metadata['content'] = content
         metadata['inputs'] = inputs
+        metadata['_interactive'] = content.find("#geneach 'chat' stop=False") != -1
 
         parsed_sections.append(metadata)
 
