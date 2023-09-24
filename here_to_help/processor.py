@@ -32,7 +32,7 @@ def run(prompt, name_values):
 
     if out != "":
         return out
-    elif result.variables().get('output') != None:
-        return (result.variables()['output'])
+    elif program.variables().get('output') != None:
+        return (program.variables()['output'])
     else:
-        return (result)
+        return (program)
