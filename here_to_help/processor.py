@@ -46,8 +46,9 @@ def run(prompt, name_values, force_interactive=False):
             print(program.variables()['output'])
 
         while True:
-            print()
             i = input(f"> ")
+            text = program.__str__()
+            program = guidance(text, **program.variables())
             program = program(input=i)
             print(program['chat'][-2].get('output', '<NONE>'))
 
