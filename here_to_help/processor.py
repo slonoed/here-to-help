@@ -1,4 +1,5 @@
 import guidance
+import readline
 
 default_model = 'gpt-4'
 

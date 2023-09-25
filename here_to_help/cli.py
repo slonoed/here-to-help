@@ -6,6 +6,7 @@ from here_to_help.prompts_parser import parse_text
 from here_to_help.web import WebServer
 from here_to_help.processor import run
 import uvicorn
+import readline
 
 default_model = 'gpt-4'
 
